@@ -232,3 +232,70 @@ function LoadTextureDict(textureDict)
     while not HasStreamedTextureDictLoaded(textureDict) do Wait(1) end
 
 end
+
+
+function GetPlayersInServer()
+
+	local playersSourceList = {}
+
+	local GamePool = GetGamePool("CPed")
+
+	for _, entity in pairs(GamePool) do
+
+        if IsPedAPlayer(entity) and GetEntityType(entity) == 1 then
+
+            local playerIdx = NetworkGetPlayerIndexFromPed(entity)
+
+            if playerIdx and NetworkIsPlayerConnected(playerIdx) then
+            
+                playersSourceList[Entity] = GetPlayerServerId(playerIdx)
+            
+            end
+
+        end
+		
+	end
+
+	return playersSourceList
+end
+
+function ClosestPlayer(radius)
+
+	local selectedPlayer
+	
+    local playerPed = PlayerPedId()
+	
+    local radius = radius + 0.0001
+	
+    local playerCoords = GetEntityCoords(playerPed)
+	
+    local GamePool = GetGamePool("CPed")
+
+	for _, entity in pairs(GamePool) do
+
+        if IsPedAPlayer(entity) and GetEntityType(entity) == 1 then
+
+            local playerIdx = NetworkGetPlayerIndexFromPed(entity)
+    
+            if playerIdx and entity ~= PlayerPedId() and NetworkIsPlayerConnected(playerIdx) then
+            
+                local entityCoords = GetEntityCoords(entity)
+            
+                local distanceToEntity = #(playerCoords - entityCoords)
+    
+                if entityCoords < radius then
+            
+                    selectedPlayer = GetPlayerServerId(playerIdx)
+            
+                    radius = distanceToEntity
+            
+                end
+    
+            end
+        end
+
+	end
+
+	return selectedPlayer
+
+end
