@@ -1,1 +1,1 @@
-Repositório criado para salvar funções criadas por mim, para facilitar a criação de scripts.
+#Repositório criado para armazenar funções que desenvolvi, visando facilitar a criação de scripts.
